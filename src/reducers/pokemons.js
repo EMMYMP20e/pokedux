@@ -10,18 +10,13 @@ export const pokemonsReducer = (state = initialState, action) => {
     case SET_POKEMONS:
       return { ...state, pokemons: action.payload };
     case SET_FAVORITE:
-      const newPokemonsList = [...state.pokemons];
-      const currentPokemonIndex = newPokemonsList.findIndex((pokemon) => {
-        return pokemon.id === action.payload.pokemonId;
-      });
-
-      if (currentPokemonIndex < 0) {
-        return state;
-      }
-
-      newPokemonsList[currentPokemonIndex].favorite = !newPokemonsList[currentPokemonIndex].favorite;
-
-      return { ...state, pokemons: newPokemonsList }
+      const pokemonsState = [...state.pokemons];
+      const newList = pokemonsState.map( (pokemon) =>
+          pokemon.id === action.payload.pokemonId ?
+            { ...pokemon, isFavorite: !pokemon.isFavorite} :
+            pokemon
+      );
+      return {...state, pokemons: newList}
     case SET_LOADING:
       return { ...state, loading: action.payload };
     default:
